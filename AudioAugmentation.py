@@ -12,7 +12,7 @@ class AudioAugmentation:
     self.dir  = '/'.join(file_path.split('/')[:-1])
 
   def write_audio_file(self, file, data, sample_rate=44000):
-    data.export(file, bitrate = sample_rate,format = "mp3")
+    librosa.output.write_wav(file,data ,sr= sample_rate)
 
   def add_noise(self, data,parameter = 0.005):
     noise = np.random.randn(len(data))
@@ -27,17 +27,17 @@ class AudioAugmentation:
     return data
 
   def random_augmentation(self):
-    shoot = random.randint(0,3)
-    if (shoot ==1):
+    shoot = random.randint(0,2)
+    if (shoot ==0):
       self.augdata = self.add_noise(self.data)
-    elif (shoot ==2):
+    elif (shoot ==1):
       self.augdata = self.shift(self.data)
-    elif (shoot ==3):
+    elif (shoot ==2):
       self.augdata = self.stretch(self.data)
     
-    new_name = self.shuffle_name(self.name)
-    new_dir  = os.path.join(self.dir,new_name)
-    self.write_audio_file(new_dir,self.augdata)
+    self.new_name = self.shuffle_name(self.name)
+    self.new_dir  = os.path.join(self.dir,self.new_name)
+    self.write_audio_file(self.new_dir,self.augdata)
 
 
 
